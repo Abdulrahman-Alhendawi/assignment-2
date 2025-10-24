@@ -1,0 +1,245 @@
+@font-face {
+  font-family: "MyFont";
+  src: url("fonts/SUSEMono-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 800;   /* variable weight range */
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MyFont";
+  src: url("fonts/SUSEMono-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background-color: #021526;
+  font-family: 'MyFont', Helvetica, sans-serif;
+  font-weight: bold;
+  overflow-x: hidden;
+  margin: 0;
+  color: white;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== Header ===== */
+#header {
+  display: flex;
+  background-color: #021526;
+  border-radius: 0px 0px 10px 10px;
+  position: fixed;
+  top: 0;                         
+  left: 0;
+  right: 0;
+  padding: 15px 30px;
+  width: 70%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 5%;
+  z-index: 2;
+}
+
+#headerElements {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+}
+
+#headerLogos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
+  margin: 0 5px;
+}
+
+span {
+  color: rgb(188, 195, 201);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  opacity: 0.6;
+  transition: 0.7s;
+}
+
+#github-logo {
+  width: 25px;
+  height: 25px;
+}
+
+.hTags {
+  margin: 0 0px;
+}
+
+.hTags:hover {
+  color: rgb(233, 242, 249);
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: rotate(360deg);
+}
+
+
+/* ===== About Section ===== */
+#meContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 180px auto 0;   /* push below header */
+  padding: 0 40px;
+  gap: 40px;
+}
+
+#bio {
+  flex: 1;
+  color: rgb(233, 242, 249);
+}
+
+h1 {
+  font-size: 2.5em;
+  color: white;
+  margin-bottom: 20px;
+}
+
+#aboutMe {
+  line-height: 1.6;
+}
+
+#personalImage {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1em solid rgb(70, 70, 70);
+}
+
+/* ===== Projects Section ===== */
+#projectsHeader {
+  text-align: center;
+  margin-top: 220px;
+  font-weight: bold;
+  font-size: 250%;
+}
+#Projects {
+  display: flex;
+  flex-wrap: wrap;             /* allow wrapping on smaller screens */
+  justify-content: center;     /* center the project cards */
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 40px auto;
+  gap: 20px;
+}
+.Project {
+  flex: 1 1 300px;             /* responsive: min 300px wide, grow if space */
+  max-width: 350px;
+  border: #043a7d solid 0.5em;
+  text-align: center;
+  border-radius: 10%;
+  transition: transform .3s ease, box-shadow .3s ease;
+  padding: 20px;
+  background-color: #031f3b;
+}
+.Project img {
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
+.Project h3 {
+  text-align: left;
+  font-weight: bold;
+  margin: 20px;
+}
+.Project p {
+  font-size: smaller;
+  padding: 0 20px 20px;
+  text-align: left;
+}
+.Project:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+/* ===== Contact Section ===== */
+#contactMe {
+  max-width: 800px;
+  margin: 100px auto;
+  text-align: center;
+}
+#contactMe h2 {
+  font-size: 250%;
+  margin-bottom: 10px;
+}
+#contactMe h3 {
+  font-size: 100%;
+  margin-bottom: 30px;
+}
+#form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+input, textarea, button {
+  width: 200%;
+  position: relative;
+  left: -100px;
+  padding: 10px;
+  max-width: 500px;
+  height: 35px;
+  background-color: rgb(70, 70, 70);
+  border-radius: 8px;
+  font-family: inherit;
+  color: white;
+  border: #043a7d solid 1px;
+  padding: 5px;
+  font-size: 1em;
+  margin-bottom: 10px ;
+  margin-top: 5px;
+}
+textarea {
+  height: 150px;
+}
+button {
+  width: 150px;
+  height: 40px;
+  align-self: center;
+  cursor: pointer;
+  position: relative;
+  left: 25px;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 768px) {
+  #meContainer {
+    flex-direction: column;
+    text-align: center;
+  }
+  #bio {
+    margin-bottom: 20px;
+  }
+  #personalImage {
+    margin-top: 10px;
+  }
+  #Projects {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+label {
+    position: relative;
+    left: -180px;
+    margin-bottom: 10px;
+}

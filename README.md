@@ -1,2 +1,2 @@
 # assignment-2
-Secondd Assignment SWE363
+Second Assignment SWE363
