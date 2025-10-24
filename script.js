@@ -36,21 +36,38 @@ function getGreeting(date = new Date()) {
   const form = document.querySelector('#form form');
   if (!form) return;
 
+  // cache references
   const nameEl = document.getElementById('name');
   const emailEl = document.getElementById('email');
   const messageEl = document.getElementById('message');
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   function clearErrors() {
+    // remove error nodes and aria attributes
     form.querySelectorAll('.error').forEach(e => e.remove());
+    [nameEl, emailEl, messageEl].forEach(el => {
+      if (!el) return;
+      el.removeAttribute('aria-describedby');
+      el.removeAttribute('aria-invalid');
+    });
   }
 
   function showError(el, text) {
+    const id = `err-${el.id}`;
+    // remove old error if present
+    const old = document.getElementById(id);
+    if (old) old.remove();
+
     const d = document.createElement('div');
     d.className = 'error';
+    d.id = id;
     d.style.color = 'crimson';
     d.style.fontSize = '0.9em';
     d.style.marginTop = '4px';
     d.textContent = text;
+    // associate error with input for screen readers
+    el.setAttribute('aria-describedby', id);
+    el.setAttribute('aria-invalid', 'true');
     el.parentNode.insertBefore(d, el.nextSibling);
   }
 
@@ -59,6 +76,9 @@ function getGreeting(date = new Date()) {
     if (!c) {
       c = document.createElement('div');
       c.id = 'confirmation';
+      // accessible status for screen readers
+      c.setAttribute('role', 'status');
+      c.setAttribute('aria-live', 'polite');
       c.style.background = '#e6ffed';
       c.style.border = '1px solid #0f9d58';
       c.style.padding = '10px';
@@ -69,6 +89,38 @@ function getGreeting(date = new Date()) {
     c.textContent = text;
     form.parentNode.insertBefore(c, form);
     setTimeout(() => c.remove(), 5000);
+  }
+
+  function showLoading() {
+    let loadingEl = document.getElementById('form-loading');
+    if (!loadingEl) {
+      loadingEl = document.createElement('div');
+      loadingEl.id = 'form-loading';
+      loadingEl.setAttribute('role', 'status');
+      loadingEl.setAttribute('aria-live', 'polite');
+      loadingEl.style.marginBottom = '10px';
+      loadingEl.style.padding = '8px';
+      loadingEl.style.background = '#fff8e1';
+      loadingEl.style.border = '1px solid #ffd54f';
+      loadingEl.style.borderRadius = '4px';
+      loadingEl.style.color = '#8a6d00';
+      loadingEl.style.fontWeight = '600';
+      // simple spinner + text
+      loadingEl.innerHTML = '<span aria-hidden="true">⏳</span> Loading...';
+    }
+    form.parentNode.insertBefore(loadingEl, form);
+    // announce busy state
+    form.setAttribute('aria-busy', 'true');
+    submitBtn.setAttribute('aria-disabled', 'true');
+    [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = true);
+  }
+
+  function hideLoading() {
+    const loadingEl = document.getElementById('form-loading');
+    if (loadingEl) loadingEl.remove();
+    form.removeAttribute('aria-busy');
+    submitBtn.removeAttribute('aria-disabled');
+    [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = false);
   }
 
   form.addEventListener('submit', function (e) {
@@ -96,35 +148,23 @@ function getGreeting(date = new Date()) {
       valid = false;
     }
 
-    if (!valid) return;
-
-    // show artificial loading state for 3 seconds
-    const submitBtn = form.querySelector('button[type="submit"]');
-    let loadingEl = document.getElementById('form-loading');
-    if (!loadingEl) {
-      loadingEl = document.createElement('div');
-      loadingEl.id = 'form-loading';
-      loadingEl.style.marginBottom = '10px';
-      loadingEl.style.padding = '8px';
-      loadingEl.style.background = '#fff8e1';
-      loadingEl.style.border = '1px solid #ffd54f';
-      loadingEl.style.borderRadius = '4px';
-      loadingEl.style.color = '#8a6d00';
-      loadingEl.style.fontWeight = '600';
-      loadingEl.textContent = 'Loading...';
+    if (!valid) {
+      // focus first invalid field for keyboard/screen reader users
+      const firstInvalid = form.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+      return;
     }
 
-    // disable inputs and show loader
-    [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = true);
-    form.parentNode.insertBefore(loadingEl, form);
+    // show artificial loading state for 3 seconds (accessible)
+    showLoading();
 
     setTimeout(() => {
-      // remove loader, enable inputs, show confirmation and reset form
-      loadingEl.remove();
-      [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = false);
-
+      hideLoading();
       showConfirmation('Thanks — your message has been sent. I will get back to you soon.');
       form.reset();
+      // move focus to confirmation if present
+      const c = document.getElementById('confirmation');
+      if (c) c.focus?.();
     }, 3000);
   });
 })();
