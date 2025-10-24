@@ -98,8 +98,33 @@ function getGreeting(date = new Date()) {
 
     if (!valid) return;
 
-    // success: show confirmation and reset form
-    showConfirmation('Thanks — your message has been sent. I will get back to you soon.');
-    form.reset();
+    // show artificial loading state for 3 seconds
+    const submitBtn = form.querySelector('button[type="submit"]');
+    let loadingEl = document.getElementById('form-loading');
+    if (!loadingEl) {
+      loadingEl = document.createElement('div');
+      loadingEl.id = 'form-loading';
+      loadingEl.style.marginBottom = '10px';
+      loadingEl.style.padding = '8px';
+      loadingEl.style.background = '#fff8e1';
+      loadingEl.style.border = '1px solid #ffd54f';
+      loadingEl.style.borderRadius = '4px';
+      loadingEl.style.color = '#8a6d00';
+      loadingEl.style.fontWeight = '600';
+      loadingEl.textContent = 'Loading...';
+    }
+
+    // disable inputs and show loader
+    [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = true);
+    form.parentNode.insertBefore(loadingEl, form);
+
+    setTimeout(() => {
+      // remove loader, enable inputs, show confirmation and reset form
+      loadingEl.remove();
+      [nameEl, emailEl, messageEl, submitBtn].forEach(el => el.disabled = false);
+
+      showConfirmation('Thanks — your message has been sent. I will get back to you soon.');
+      form.reset();
+    }, 3000);
   });
 })();
